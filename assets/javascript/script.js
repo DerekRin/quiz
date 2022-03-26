@@ -1,6 +1,3 @@
-//Create a score function that adds or subtract []
-//Create a local storage that stores name and scores []
-
 var hide = document.querySelector("#hide");
 var show = document.querySelector("#show");
 var startButton = document.querySelector("#start");
@@ -44,13 +41,27 @@ start.addEventListener("click", function () {
   buildQuiz();
 });
 
+highscores.addEventListener("click", function () {
+  highScores = JSON.parse(localStorage.getItem("highScores"));
+  console.log(highScores);
+  var scoreShow = document.createElement("h3");
+  scoreShow.innerHTML = highScores;
+  highscores.appendChild(scoreShow);
+});
+
 function scoreSave(userScore) {
   const highScores = JSON.parse(localStorage.getItem("highScores"));
   const saveScore = confirm(
     `Your score is ${userScore.score}! Would you like to save your score?`
   );
   if (saveScore) {
-    const newHighScores = [...highScores, userScore];
+    let newHighScores;
+    if (highScores) {
+      newHighScores = [...highScores, userScore];
+    } else {
+      newHighScores = [userScore];
+    }
+    console.log(highScores);
     localStorage.setItem("highScores", JSON.stringify(newHighScores));
   } else {
     window.location.reload();
@@ -89,15 +100,13 @@ function buildQuiz() {
       } else {
         alert("finished");
         const userScore = { name: name, score: score };
-        localStorage.setItem("userScore", JSON.stringify(userScore));
         scoreSave(userScore);
+        location.reload();
       }
-      console.log(event);
-      console.log(score);
-      console.log(name);
     })
   );
 }
+
 function showResults() {}
 var myfunc = setInterval(function () {}, 1000);
 
